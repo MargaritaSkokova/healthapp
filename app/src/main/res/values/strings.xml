@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HealthApp</string>
+    <string name="health_screen">Health</string>
+    <string name="article_screen">Article</string>
+    <string name="tell_more">Wanna tell something else?</string>
+    <string name="header_question">How do you feel today?</string>
+    <string name="life_question">How is your being?</string>
+    <string name="health_question">How is your health?</string>
+    <string name="mind_question">What is on your mind?</string>
+</resources>
