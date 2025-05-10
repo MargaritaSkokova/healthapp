@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
+import com.maran.healthapp.data.dao.HealthStateDao
 import com.maran.healthapp.domain.models.HealthStateModel
 import com.maran.healthapp.domain.repositories.HealthStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HealthViewModel @Inject constructor(
     private val preferences: SharedPreferences,
-    private val repository: HealthStateRepository
+    private val repository: HealthStateRepository,
+    private val healthStateDao: HealthStateDao
 ) : ViewModel() {
     private val coroutineScope: CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -83,15 +85,17 @@ class HealthViewModel @Inject constructor(
         }
 
         coroutineScope.launch {
-            repository.saveState(
-                HealthStateModel(
-                    LocalDate.now(),
-                    lifeState = chosenLifeIndex.intValue,
-                    healthState = chosenHealthIndex.intValue,
-                    moodState = chosenMoodIndex.intValue,
-                    message = text.value,
-                )
+            val healthModel = HealthStateModel(
+                date = LocalDate.now(),
+                lifeState = chosenLifeIndex.intValue,
+                healthState = chosenHealthIndex.intValue,
+                moodState = chosenMoodIndex.intValue,
+                message = text.value,
             )
+            repository.saveState(
+                healthModel
+            )
+            healthStateDao.insert(healthModel)
         }
 
         wasChecked.value = true
