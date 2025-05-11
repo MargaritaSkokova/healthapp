@@ -58,7 +58,7 @@ fun ArticleScreen(
                 Spacer(modifier = Modifier.size(16.dp))
                 ArticleList(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    items = articleViewModel.articles.value,
+                    items = articleViewModel.getArticles(),
                     onClick = { index: Int -> articleViewModel.readArticle(index) })
             }
         }
@@ -78,8 +78,8 @@ fun ArticleList(modifier: Modifier = Modifier, items: List<ArticleModel>, onClic
     ) {
         itemsIndexed(items) { index, item ->
             ArticleCard(
-                articleName = item.name,
-                articlePreview = item.text,
+                articleName = item.title,
+                articlePreview = item.description ?: "empty",
                 onClick = onClick,
                 index = index
             )
@@ -153,7 +153,7 @@ fun ReaderScreen(
         }
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = articleModel.name,
+            text = articleModel.title,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground
@@ -162,7 +162,7 @@ fun ReaderScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-            text = articleModel.author,
+            text = articleModel.author ?: "unknown author",
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -171,7 +171,7 @@ fun ReaderScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 2.dp, start = 16.dp, end = 16.dp),
-            text = articleModel.date.format(
+            text = articleModel.publishedAt.format(
                 DateTimeFormatter.ofPattern(
                     "dd.MM.yyyy",
                     Locale.getDefault()
@@ -189,7 +189,7 @@ fun ReaderScreen(
         ) {
             Text(
                 modifier = Modifier,
-                text = articleModel.text,
+                text = articleModel.content ?: "empty",
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

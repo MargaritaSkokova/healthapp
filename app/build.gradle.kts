@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.0"
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -19,6 +21,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "NEWS_API_KEY", "\"${properties.getValue("NEWS_API_KEY")}\"")
     }
 
     buildTypes {
@@ -39,10 +42,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.storage)
@@ -79,4 +86,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Paging
+    implementation(libs.androidx.paging.runtime.ktx)
+
+    // Image Loading
+    implementation(libs.glide)
+
+    // logging
+    implementation(libs.squareup.logging.interceptor)
 }

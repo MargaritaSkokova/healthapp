@@ -1,15 +1,18 @@
 package com.maran.healthapp.domain.repositories
 
+
+import androidx.paging.PagingData
 import com.maran.healthapp.domain.models.ArticleModel
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class ArticleRepository @Inject constructor() {
-    suspend fun getAllArticles(): List<ArticleModel> {
-        // todo
-        return listOf()
-    }
+interface ArticleRepository {
+    fun getTopHeadlines(
+        category: String?,
+        country: String?,
+        pageSize: Int?
+    ): Flow<PagingData<ArticleModel>>
 
-    suspend fun saveArticle(article: ArticleModel) {
-        // todo
-    }
+    fun searchNews(
+        query: String
+    ): Flow<PagingData<ArticleModel>>
 }
